@@ -4,12 +4,13 @@ def manhattanDist(node, app, target):
     return (abs(targetRow*10 - nodeRow*10) 
     + abs(targetCol*10 - nodeCol*10))
 
-def getShortestPath(endNode, nodes):
+def getShortestPath(endNode, app):
     returnList = []
     currentNode = endNode
     while currentNode['prev'] != None:
         returnList.append(currentNode['coords'])
         currentNode = currentNode['prev']
+    app.shortestPath = returnList
     return returnList
 
 def lowestCostNode(nodes):
@@ -63,7 +64,7 @@ def shortestPath(startingNode, app, target):
 
         if current['coords'] == target:
             print('true')
-            return getShortestPath(current, closedNodes)
+            return getShortestPath(current, app)
 
         neighbors = getNeighbors(current)
         for neighbor in neighbors:

@@ -9,6 +9,7 @@
 import random 
 from helpers import *
 from backgroundLogic import *
+from shortestPath import *
 
 class Enemy:
     def __init__(self, app, maze):
@@ -21,7 +22,7 @@ class Enemy:
         self.lastCol = 1
         self.xVel = 0
         self.yVel = 0
-        self.state = 'wandering'
+        self.state = 'following'
         self.visited = set()
         self.movingBack = []
         # Adjust speeds. 
@@ -56,7 +57,7 @@ class Enemy:
 # Actions
     def wander(self, app):
         if self.checkStraightLine(app):
-            print('found')
+            # print('found')
             self.visited = set()
             self.movingBack = []
             self.state = 'following'
@@ -109,7 +110,7 @@ class Enemy:
 
     def hunt(self, app):
         if self.checkStraightLine(app):
-            print('found')
+            # print('found')
             self.state = 'following'
         # Check shadow exists 
         if len(app.playerShadow.shadow) == 0:
@@ -141,30 +142,28 @@ class Enemy:
             app.playerShadow.shadow = app.playerShadow.shadow[currShadowIndex:]
             self.changeVelHunt(moveX, moveY)
 
+# https://brilliant.org/wiki/a-star-search/
+# https://isaaccomputerscience.org/concepts/dsa_search_a_star
+# https://www.youtube.com/watch?v=-L-WgKMFuhE
+
     def follow(self, app):
         if self.currentInterval >= self.followIntervals:
             # print('time up')
             self.currentInterval = 0
             self.state = 'wandering'
 
-        bestDir = (0, 0)
-        bestDist = 1000
-        directions = [(0,1), (0, -1), (1,0), (-1, 0)]
-        for direction in directions:
-            newRow = self.row + direction[0]
-            newCol = self.col + direction[1]
-            if self.isInBounds(newRow, newCol):
-                dist = getDistance(app.player.row, app.player.col, newRow, newCol)
-                if dist < bestDist:
-                    bestDist = dist
-                    bestDir = direction
-        self.changeVelFollow(bestDir[1], bestDir[0])
+        if (self.row, self.col) != (app.player.row, app.player.col):
+            moveTowardRow, moveTowardCol = shortestPath((self.row, self.col), app, 
+            (app.player.row, app.player.col))[-1]
+            print(moveTowardRow, moveTowardCol)
+            moveRow, moveCol = (moveTowardRow-self.row, moveTowardCol-self.col)
+            print(moveRow, moveCol)
+            self.changeVelFollow(moveCol, moveRow)
 
 # Action Helpers
     def checkStraightLine(self, app):
         # Note: Currently not checking diagonals
-        directions = [(0,1), (0, -1), (1,0), (-1, 0), (1,1), (1,-1), (-1,1),
-        (-1,-1)]
+        directions = [(0,1), (0, -1), (1,0), (-1, 0)]
         for direction in directions:
             yAdj, xAdj = direction
             cell1 = (self.row + yAdj, self.col + xAdj)

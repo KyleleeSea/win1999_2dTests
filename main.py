@@ -23,8 +23,9 @@ def appStarted(app):
     pygame.mixer.init()
     # https://obsydianx.itch.io/horror-sfx-volume-1
     app.backgroundSound = backgroundSound('./assets/backgroundAudio.mp3')
-    app.shortestPath = shortestPath((10,10), app, (app.player.row, app.player.col))
-    print(shortestPath((10,10), app, (app.player.row, app.player.col)))
+    app.shortestPath = []
+    # app.shortestPath = shortestPath((10,10), app, (app.player.row, app.player.col))
+    # print(shortestPath((10,10), app, (app.player.row, app.player.col)))
 
 def timerFired(app):
     app.enemy.timerFired(app)
