@@ -5,9 +5,10 @@ from player import *
 from backgroundSound import *
 from enemy import *
 from playerShadow import *
+from shortestPath import *
 
 def appStarted(app):
-    app.timerDelay = 200
+    app.timerDelay = 100
     app.margin = min(app.width, app.height)//15
     app.maze = Maze(20)
     app.level = 1
@@ -21,7 +22,9 @@ def appStarted(app):
     #Init audio
     pygame.mixer.init()
     # https://obsydianx.itch.io/horror-sfx-volume-1
-    app.backgroundSound = backgroundSound('./assets/backgroundAudio.mp3')    
+    app.backgroundSound = backgroundSound('./assets/backgroundAudio.mp3')
+    app.shortestPath = shortestPath((10,10), app, (app.player.row, app.player.col))
+    print(shortestPath((10,10), app, (app.player.row, app.player.col)))
 
 def timerFired(app):
     app.enemy.timerFired(app)

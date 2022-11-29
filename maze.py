@@ -8,7 +8,6 @@ class Maze:
         self.cellsFailedBecauseMiddleCond = []
         self.maze = self.generateMaze(size)
         self.exitBlock = None
-        print(self.maze)
 
     def addExit(self, exitBlock):
         self.exitBlock = exitBlock
@@ -145,10 +144,13 @@ def drawOpen(app, canvas, row, col, maze):
     (x0, y0, x1, y1) = getCellBounds(row, col, maze, app)
 
     # Debugging code
-    if row == app.player.lastRow and col == app.player.lastCol:
+    if (row, col) in app.shortestPath:
         canvas.create_rectangle(x0, y0, x1, y1, fill='green', outline='black')
 
-    if (row, col) in app.playerShadow.shadow:
-        canvas.create_rectangle(x0, y0, x1, y1, fill='yellow', outline='black')
+    # if row == app.player.lastRow and col == app.player.lastCol:
+    #     canvas.create_rectangle(x0, y0, x1, y1, fill='green', outline='black')
+
+    # if (row, col) in app.playerShadow.shadow:
+    #     canvas.create_rectangle(x0, y0, x1, y1, fill='yellow', outline='black')
     else:
         canvas.create_rectangle(x0, y0, x1, y1, fill='white', outline='black')

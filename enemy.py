@@ -25,9 +25,9 @@ class Enemy:
         self.visited = set()
         self.movingBack = []
         # Adjust speeds. 
-        self.wanderSpeed = (app.player.moveVel)*1.2
-        self.huntSpeed = (app.player.moveVel)*2
-        self.followSpeed = (app.player.moveVel)*0.95
+        self.wanderSpeed = (app.player.moveVel)*0.6
+        self.huntSpeed = (app.player.moveVel)
+        self.followSpeed = (app.player.moveVel)*0.45
         # enemySize probably not needed after sprite animated
         self.enemySize = int(min(app.width, app.height)//(len(self.maze.maze)*4))
 
@@ -56,7 +56,7 @@ class Enemy:
 # Actions
     def wander(self, app):
         if self.checkStraightLine(app):
-            # print('found')
+            print('found')
             self.visited = set()
             self.movingBack = []
             self.state = 'following'
@@ -109,7 +109,7 @@ class Enemy:
 
     def hunt(self, app):
         if self.checkStraightLine(app):
-            # print('found')
+            print('found')
             self.state = 'following'
         # Check shadow exists 
         if len(app.playerShadow.shadow) == 0:
@@ -163,7 +163,8 @@ class Enemy:
 # Action Helpers
     def checkStraightLine(self, app):
         # Note: Currently not checking diagonals
-        directions = [(0,1), (0, -1), (1,0), (-1, 0)]
+        directions = [(0,1), (0, -1), (1,0), (-1, 0), (1,1), (1,-1), (-1,1),
+        (-1,-1)]
         for direction in directions:
             yAdj, xAdj = direction
             cell1 = (self.row + yAdj, self.col + xAdj)
